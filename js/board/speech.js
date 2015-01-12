@@ -29,11 +29,6 @@ else {
     }
   };
 
-  // Listen for errors
-  recognizer.onerror = function(event) {
-    log.innerHTML = 'Recognition error: ' + event.message + '<br />' + log.innerHTML;
-  };
-
   recognizer.interimResults = true;
   recognizer.start();
 }
