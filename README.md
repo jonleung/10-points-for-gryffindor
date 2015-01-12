@@ -20,3 +20,5 @@ ls | sed 's/^\(.*\)\.wav$/lame -V2 "\1.wav" "\1.mp3"/' | sh
 
 
 http://www.sitepoint.com/introducing-web-speech-api/
+
+- implement twilio send link as a text message by adding phone number
