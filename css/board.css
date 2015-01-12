@@ -1,3 +1,7 @@
+.center {
+  text-align: center;
+}
+
 .row, textarea {
   text-align: center;
 }
@@ -13,5 +17,9 @@
 
 #transcription {
   font-size: 30px;
-  height: 150px;
+  height: 300px;
+}
+
+.highlight {
+  background-color: red;
 }
