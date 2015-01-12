@@ -23,6 +23,14 @@ $(document).ready(function() {
 
   var ding = new Howl({urls: ['sounds/Ding.wav'] });
 
+  pointsRef.on("value", function(snapshot) {
+    var pointsObject = snapshot.val();
+
+    $.each(pointsObject, function(houseKey, newPointValue) {
+      $("#"+houseKey).html(newPointValue);
+    });
+  });
+
   dweetio.listen_for("10-points-for-gryffindor", function(dweet){
     setTimeout(function() {
       ding.play();
