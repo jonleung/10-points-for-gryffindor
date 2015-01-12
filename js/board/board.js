@@ -40,6 +40,8 @@ $(document).ready(function() {
 
       $.each(regexHouseMapping, function(house, houseKey) {
         if (command.indexOf(house) > -1) {
+          $("#"+houseKey+"-logo").effect("bounce", { times: 3}, "slow");
+
           var houseRef = pointsRef.child(houseKey);
           houseRef.transaction(function(curPoints){
             curPoints = curPoints || 0;
