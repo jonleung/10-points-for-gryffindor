@@ -3,8 +3,8 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
   //============================================
   // Shared Variables
 
-  var THRESHOLD_MAGNITUDE = 30;
   var DWEET_CHANNEL = "jonathan-leung-channel"
+  var THRESHOLD_MAGNITUDE = 30;
   var canTrigger = true;
   var sounds = [];
 
@@ -18,14 +18,16 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
   //============================================
   // Trigger The Wand
 
-  var waveWand = function() {
+  var waveWandHandler = function() {
     canTrigger = false;
     var resetCanTrigger = function() {
       canTrigger = true;
     }
     setTimeout(resetCanTrigger, 500);
 
-    loadAllSounds();
+    playRandomSound();
+
+    dweet();
   }
 
   //============================================
@@ -43,7 +45,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
     console.log("Magnitude: " + magnitude);
 
     if (magnitude > THRESHOLD_MAGNITUDE && canTrigger == true) {
-      waveWand();
+      waveWandHandler();
     }
   }
 
@@ -77,12 +79,14 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
   // Play All Sounds
 
   var playRandomSound = function() {
-    var randomSoundFileIndex = Math.floor((Math.random() * sounds.length - 1) + 1);
+    var randomSoundFileIndex = Math.floor((Math.random() * sounds.length));
     var sound = sounds[randomSoundFileIndex];
     sound.play();
   }
 
   var initialize = function() {
+    loadAllSounds();
+
     $("button").on("click touchstart", function(touchEvent) {
       $("button").hide();
       $("#volume").hide();

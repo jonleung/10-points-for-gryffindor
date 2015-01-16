@@ -1,64 +1,94 @@
-$(document).ready(function() {
+var theFunctionToCallWhenTheDocumentIsReady = function() {
 
-  var rootRef = new Firebase("https://10-points.firebaseio.com/");
-  var regexHouseMapping = {
-    "gryffindor": "g",
-    "hufflepuff": "h",
-    "slytherin": "s",
-    "ravenclaw": "r"
+  //============================================
+  // Settings
+
+  var DWEET_CHANNEL = "jonathan-leung-channel";
+
+  //============================================
+  // Firebase References
+
+  var rootFirebaseRef = new Firebase("https://1-point.firebaseio.com/");
+  var gRef = rootFirebaseRef.child("g");
+  var sRef = rootFirebaseRef.child("s");
+
+  //============================================
+  // Helper Functions
+
+  var getPointsFromString = function(string) {
+    var arrayOfThingsThatLookLikeNumbers = string.match( /(\d+)/gm );
+    var firstMatch = arrayOfThingsThatLookLikeNumbers[0]
+    var points = parseInt(firstMatch);
+    return points;
   }
 
-  var pointsRef = rootRef.child("points");
-  pointsRef.once("value", function(snapshot) {
-    var pointsObject = snapshot.val();
-    if (pointsObject === null) {
-      pointsRef.set({g: 0, s: 0, r: 0, h: 0});
-    }
-    else {
-      $.each(regexHouseMapping, function(house, houseKey) {
-        $("#"+houseKey).html(pointsObject[houseKey]);
-      });
-    }
-  });
+  var contains = function(wholeString, subString) {
+    return wholeString.indexOf(subString) > -1
+  };
 
-  var ding = new Howl({urls: ['sounds/Ding.wav'] });
+  //============================================
+  // Initialize Points
 
-  pointsRef.on("value", function(snapshot) {
-    var pointsObject = snapshot.val();
+  var initializePoints = function() {
 
-    $.each(pointsObject, function(houseKey, newPointValue) {
-      $("#"+houseKey).html(newPointValue);
+    gRef.once("value", function(firebaseSnapshot) {
+      var numPoints = firebaseSnapshot.val();
+      if (numPoints === null) {
+        gRef.set(0);
+      }
+      else {
+        $("#g").html(numPoints);
+      }
     });
-  });
 
-  dweetio.listen_for("10-points-for-gryffindor", function(dweet){
-    setTimeout(function() {
-      ding.play();
+    sRef.once("value", function(firebaseSnapshot) {
+      var numPoints = firebaseSnapshot.val();
+      if (numPoints === null) {
+        sRef.set(0);
+      }
+      else {
+        $("#s").html(numPoints);
+      }
+    });
+  }
 
-      var command = $("#transcription").val().toLowerCase();
-      var additionalPoints = parseInt(command.match( /(\d+)/gm)[0]);
+  var dweetHandler = function(dweet) {
+    var ding = new Howl({urls: ['sounds/Ding.wav'] });
+    ding.play();
 
-      $.each(regexHouseMapping, function(house, houseKey) {
-        if (command.indexOf(house) > -1) {
-          $("#"+houseKey+"-logo").effect("bounce", { times: 3}, "slow");
+    var spokenWords = $("#transcription").val().toLowerCase();
+    var additionalPoints = getPointsFromString(spokenWords);
 
-          var houseRef = pointsRef.child(houseKey);
-          houseRef.transaction(function(curPoints){
-            curPoints = curPoints || 0;
-            var newTotalPoints = curPoints + additionalPoints;
-            console.log(house + " now has " + curPoints + " + " + additionalPoints + " = " + newTotalPoints + " points ");
-            $("#"+houseKey).html(newTotalPoints);
-            return newTotalPoints;
-          });
+    if(contains(spokenWords, "gryffindor")) {
+      $("#g-logo").effect("bounce");
 
+      var incrementGryffindorPointsByAdditionalPoints = function(curPoints) {
+        var newTotalPoints = curPoints + additionalPoints;
+        $("#g-points").html(newTotalPoints);
+        return newTotalPoints;
+      }
+      gRef.transaction(incrementGryffindorPointsByAdditionalPoints);
+    }
 
-        }
-      });
+    else if(contains(spokenWords, "slytherin")) {
+      $("#-logo").effect("bounce");
 
+      var incrementSlytherinPointsByAdditionalPoints = function(curPoints) {
+        var newTotalPoints = curPoints + additionalPoints;
+        $("#s-points").html(newTotalPoints);
+        return newTotalPoints;
+      }
+      sRef.transaction(incrementSlytherinPointsByAdditionalPoints);
+    }
+  }
 
+  var initialize = function() {
+    initializePoints();
+    dweetio.listen_for(DWEET_CHANNEL, dweetHandler);
+  }
 
+  initialize();
 
-    }, 500);
-  });
+};
 
-});
+$(document).ready(theFunctionToCallWhenTheDocumentIsReady)
