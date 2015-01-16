@@ -21,7 +21,7 @@ $(document).ready(function() {
     }
   });
 
-  var ding = new Howl({urls: ['sounds/Ding.wav'] });
+  var ding = new Howl({urls: ['sounds/Ding.mp3'] });
 
   pointsRef.on("value", function(snapshot) {
     var pointsObject = snapshot.val();
