@@ -25,12 +25,13 @@ $(document).ready(function() {
 
   });
 
-  var THRESHOLD_MAGNITUDE = 50;
+  var THRESHOLD_MAGNITUDE = 30;
 
   var canTrigger = true;
 
   var deviceMotionHandler = function(motion) {
     // Grab the acceleration from the results
+
     var acceleration = motion.acceleration;
 
     var magnitude = Math.sqrt(
@@ -38,6 +39,8 @@ $(document).ready(function() {
       Math.pow(acceleration.y, 2) +
       Math.pow(acceleration.z, 2)
     )
+
+    console.log(magnitude)
 
     if (magnitude > THRESHOLD_MAGNITUDE && canTrigger == true) {
       canTrigger = false;
