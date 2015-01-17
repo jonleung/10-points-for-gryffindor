@@ -37,7 +37,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
         gRef.set(0);
       }
       else {
-        $("#g").html(numPoints);
+        $("#g-points").html(numPoints);
       }
     });
 
@@ -47,7 +47,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
         sRef.set(0);
       }
       else {
-        $("#s").html(numPoints);
+        $("#s-points").html(numPoints);
       }
     });
   }
@@ -56,10 +56,10 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
     var ding = new Howl({urls: ['sounds/Ding.wav'] });
     ding.play();
 
-    var spokenWords = $("#transcription").val().toLowerCase();
-    var additionalPoints = getPointsFromString(spokenWords);
+    var wordsSpoken = $("#transcription").val().toLowerCase();
+    var additionalPoints = getPointsFromString(wordsSpoken);
 
-    if(contains(spokenWords, "gryffindor")) {
+    if(contains(wordsSpoken, "gryffindor")) {
       $("#g-logo").effect("bounce");
 
       var incrementGryffindorPointsByAdditionalPoints = function(curPoints) {
@@ -70,7 +70,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
       gRef.transaction(incrementGryffindorPointsByAdditionalPoints);
     }
 
-    else if(contains(spokenWords, "slytherin")) {
+    else if(contains(wordsSpoken, "slytherin")) {
       $("#-logo").effect("bounce");
 
       var incrementSlytherinPointsByAdditionalPoints = function(curPoints) {

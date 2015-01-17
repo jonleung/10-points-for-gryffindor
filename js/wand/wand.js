@@ -12,7 +12,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
   // Shared Variables
 
   var dweet = function(channel) {
-    dweetio.dweet_for(DWEET_CHANNEL, {time: new Date(), type: "trigger"});
+    dweetio.dweet_for(channel, {time: new Date(), type: "trigger"});
   }
 
   //============================================
@@ -27,7 +27,7 @@ var theFunctionToCallWhenTheDocumentIsReady = function() {
 
     playRandomSound();
 
-    dweet();
+    dweet(DWEET_CHANNEL);
   }
 
   //============================================
